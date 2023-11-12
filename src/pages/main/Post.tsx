@@ -78,7 +78,7 @@ export const Post = (props: Props) => {
             <div>
                 <p>@{post.userName}</p>
                 <button onClick={hasUserLiked ? removeLike : addLike}>{hasUserLiked ? <>&#128078;</> : <>&#128077;</>}</button>
-                {likes?.length && <p>Likes: {likes?.length}</p>}
+                {!!likes?.length && <p>Likes: {likes?.length}</p>}
             </div>
         </div>
     );
