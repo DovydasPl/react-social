@@ -1,0 +1,36 @@
+.header {
+    background: red;
+    padding: 20px 10px;
+    display: flex;
+    height: 50px;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 50px;
+}
+
+
+.nav {
+    display: flex;
+    gap: 20px;
+}
+
+.navlink {
+    color: white;
+}
+
+.profile {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 30px;
+}
+
+.profileName {
+    color: white;
+}
+
+.profileImage {
+    height: 30px;
+    border-radius: 100%;
+}
