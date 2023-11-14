@@ -1,25 +1,18 @@
-import { IPost } from ".";
 import { addDoc, collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { db, auth } from "../../config/firebase";
 import { useEffect, useState } from "react";
+import { CommentsBox } from "./CommentsBox";
+import { ILike, IPost } from "../../types/posts";
 
-interface Props {
-    post: IPost;
-}
-
-interface Like {
-    id: string;
-    userId: string;
-}
-
-export const Post = (props: Props) => {
+export const Post = (props: { post: IPost; }) => {
     const { post } = props;
     const [user] = useAuthState(auth);
-    const [likes, setLikes] = useState<Like[] | null>(null);
+    const [likes, setLikes] = useState<ILike[] | null>(null);
 
     const likesRef = collection(db, 'likes');
     const likesDoc = query(likesRef, where('postId', '==', post.id));
+
 
     const addLike = async () => {
         try {
@@ -53,9 +46,14 @@ export const Post = (props: Props) => {
         }
     };
 
+
+
     const getLikes = async () => {
         const data = await getDocs(likesDoc);
-        setLikes(data.docs.map(doc => ({ id: doc.id, userId: doc.data().userId })));
+        setLikes(data.docs.map(doc => ({
+            id: doc.id,
+            userId: doc.data().userId
+        })));
     };
 
     const hasUserLiked = likes?.find((like) => {
@@ -81,7 +79,8 @@ export const Post = (props: Props) => {
                 <p>@{post.userName}</p>
                 <button onClick={hasUserLiked ? removeLike : addLike}>{hasUserLiked ? <>&#128078;</> : <>&#128077;</>}</button>
                 {!!likes?.length && <p>Likes: {likes?.length}</p>}
+                <CommentsBox post={post} />
             </div>
-        </div>
+        </div >
     );
 };

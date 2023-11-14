@@ -1,15 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getDocs, collection } from 'firebase/firestore';
 import { db } from '../../config/firebase';
-import { Post } from './Post';
-
-export interface IPost {
-    id: string;
-    title: string;
-    description: string;
-    userId: string;
-    userName: string;
-}
+import { Post } from '../../components/post/index';
+import { IPost } from '../../types/posts';
 
 export const Main = () => {
     const [postsList, setPostsList] = useState<IPost[] | null>(null);
@@ -29,7 +22,7 @@ export const Main = () => {
     return (
         <div>
             {postsList?.map((post) => (
-                <Post post={post} />
+                <Post key={post.id} post={post} />
             ))}
         </div>
     );

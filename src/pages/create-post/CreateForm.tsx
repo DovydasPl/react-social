@@ -5,11 +5,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { db, auth } from '../../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-
-interface CreateFormData {
-    title: string;
-    description: string;
-}
+import { ICreateFormData } from '../../types/posts';
 
 export const CreateForm = () => {
     const [user] = useAuthState(auth);
@@ -21,13 +17,13 @@ export const CreateForm = () => {
         description: yup.string().required('Description is required.').min(3, 'Description must be at least 3 characters long.').max(1000, 'Description can be 1000 characters long at a maximum.')
     });
 
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateFormData>({
+    const { register, handleSubmit, formState: { errors } } = useForm<ICreateFormData>({
         resolver: yupResolver(schema)
     });
 
     const postsRef = collection(db, 'posts');
 
-    const onCreatePost = async (data: CreateFormData) => {
+    const onCreatePost = async (data: ICreateFormData) => {
         await addDoc(postsRef, {
             ...data,
             userName: user?.displayName,
