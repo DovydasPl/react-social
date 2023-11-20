@@ -1,14 +1,23 @@
+export interface IUser {
+    id: number;
+    email: string;
+}
+
 export interface IPost {
-    id: string;
+    id: number;
     title: string;
     description: string;
-    userId: string;
-    userName: string;
+    image: string;
+    user: IUser;
+    like_count: number;
+    is_liked: boolean;
 }
 
 export interface IComment {
     id: string;
     userId: string;
+    userPhoto: string | null;
+    userName: string | null;
     content: string;
 }
 

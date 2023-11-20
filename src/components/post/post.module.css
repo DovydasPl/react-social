@@ -1,0 +1,80 @@
+.card {
+    padding: 16px;
+    width: 450px;
+
+    border: 1px solid #E8E8EA;
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.cardImage {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.cardTitle {
+    font-size: 2.4rem;
+    color: #181A2A;
+    margin: 1.6re 0;
+}
+
+.cardDescription {
+    font-size: 1.6rem;
+    margin-bottom: 1.6rem;
+}
+
+.cardInfo {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.userInfo {
+    display: flex;
+    gap: 8px;
+    font-size: 1.6rem;
+    align-items: center;
+    justify-self: flex-end;
+}
+
+.userImage {
+    width: 36px;
+    height: 36px;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.likeButton {
+    background: none;
+    font-family: inherit;
+    border: 1px solid #3B3C4A;
+    box-sizing: border-box;
+    height: 24px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    color: #3B3C4A;
+}
+
+.likeButton:hover {
+    cursor: pointer;
+    background-color: rgb(218, 218, 218);
+    transition: background-color 200ms linear;
+}
+
+.likeButton:active {
+    background-color: rgb(189, 189, 189);
+}
+
+.pressedLikeButton {
+    font-weight: bold;
+    border: 2px solid black;
+}

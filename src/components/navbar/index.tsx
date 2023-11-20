@@ -1,29 +1,39 @@
-import { Link } from 'react-router-dom';
-import { auth } from '../../config/firebase';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { signOut } from 'firebase/auth';
-
+import { Link, NavLink } from 'react-router-dom';
 import styles from './navbar.module.css';
+import useAuth from '../../hooks/useAuth';
 
 export const Navbar = () => {
-    const [user] = useAuthState(auth);
-    const logOut = async () => {
-        await signOut(auth);
-    };
+    const { auth } = useAuth();
 
     return (
-        <div className={styles.header}>
-            <div className={styles.nav}>
-                <Link className={styles.navlink} to={'/'}>Home</Link>
-                {!user ? <Link className={styles.navlink} to={'/login'}>Login</Link> : <Link className={styles.navlink} to={'/create-post'}>Create post</Link>}
-            </div>
-            {user && (
-                <div className={styles.profile}>
-                    <div className={styles.profileName}>{user?.displayName}</div>
-                    <img className={styles.profileImage} src={user?.photoURL || ""} alt='Test' />
-                    <button onClick={logOut}>Sign out</button>
+        <div className={styles.wrapper}>
+            <header>
+                <Link to='/feed'>
+                    <img src="logo.svg" alt="logo" />
+                </Link>
+                <div className={styles.navigation}>
+                    <nav>
+                        {auth ? (
+                            <>
+                                <NavLink className={(data) => (data.isActive ? `${styles.active} ${styles.navlink}` : styles.navlink)} to={'/feed'}>Feed</NavLink>
+                                <NavLink className={(data) => (data.isActive ? `${styles.active} ${styles.navlink}` : styles.navlink)} to={'/create-post'}>New post</NavLink>
+                            </>
+
+                        ) : (
+                            <>
+                                <NavLink className={(data) => (data.isActive ? `${styles.active} ${styles.navlink}` : styles.navlink)} to={'/login'}>Login</NavLink>
+                                <NavLink className={(data) => (data.isActive ? `${styles.active} ${styles.navlink}` : styles.navlink)} to={'/register'}>Register</NavLink>
+                            </>
+                        )}
+                    </nav>
+                    {auth && (
+                        <div className={styles.profile}>
+                            {auth.email}
+                        </div>
+                    )}
                 </div>
-            )}
+            </header>
+
         </div>
     );
 };

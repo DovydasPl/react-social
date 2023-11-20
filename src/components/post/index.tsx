@@ -1,86 +1,52 @@
-import { addDoc, collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { db, auth } from "../../config/firebase";
 import { useEffect, useState } from "react";
-import { CommentsBox } from "./CommentsBox";
 import { ILike, IPost } from "../../types/posts";
+import styles from './post.module.css';
+import { APIService } from "../../API";
+import { ResponseData } from "../../types/data";
 
 export const Post = (props: { post: IPost; }) => {
     const { post } = props;
-    const [user] = useAuthState(auth);
-    const [likes, setLikes] = useState<ILike[] | null>(null);
+    const [likeCount, setLikeCount] = useState<number>(post.like_count);
+    const [isLiked, setIsLiked] = useState<boolean>(post.is_liked);
 
-    const likesRef = collection(db, 'likes');
-    const likesDoc = query(likesRef, where('postId', '==', post.id));
+    const [response, setResponse] = useState<ResponseData | null>(null);
+    const [loading, setLoading] = useState(false);
 
 
-    const addLike = async () => {
+
+    const toggleLike = () => {
         try {
-            const newDoc = await addDoc(likesRef, {
-                userId: user?.uid,
-                postId: post.id
-            });
+            APIService.likePost({ setResponse, setLoading, 'id': post.id });
 
-            if (user) {
-                setLikes((prev => prev ? [...prev, { id: newDoc.id, userId: user?.uid }] : [{ id: newDoc.id, userId: user?.uid }]));
-            }
+            setIsLiked(prev => !prev);
+
+            setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
         } catch (err) {
             console.log(err);
         }
     };
-
-    const removeLike = async () => {
-        try {
-            const likeToDeleteDoc = query(likesRef, where('postId', '==', post.id), where('userId', '==', user?.uid));
-            const likeToDeleteData = await getDocs(likeToDeleteDoc);
-            const likeId = likeToDeleteData.docs[0].id;
-            const likeToDelete = doc(db, 'likes', likeId);
-
-            await deleteDoc(likeToDelete);
-
-            if (user) {
-                setLikes((prev => prev && prev.filter((like) => like.id !== likeId)));
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-
-
-    const getLikes = async () => {
-        const data = await getDocs(likesDoc);
-        setLikes(data.docs.map(doc => ({
-            id: doc.id,
-            userId: doc.data().userId
-        })));
-    };
-
-    const hasUserLiked = likes?.find((like) => {
-        return like.userId === user?.uid;
-    });
-
-
-    useEffect(() => {
-        getLikes();
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     return (
-        <div>
-            <div>
-                <h1>{post.title}</h1>
+        <div className={styles.card}>
+            <div className={styles.userInfo}>
+                <img className={styles.userImage} src="userPlaceholder.png" alt="user" />
+                <p>{post.user.email}</p>
             </div>
-            <div>
-                <p>{post.description}</p>
+            <div className={styles.cardInfo}>
+                <div>
+                    <h2 className={styles.cardTitle}>{post.title}</h2>
+                    <div className={styles.cardDescription}>{post.description}</div>
+                </div>
+                <div>
+                    <img className={styles.cardImage} src={post.image || 'postPlaceholder.png'} />
+                    <div className={styles.actions}>
+                        <button className={`${styles.likeButton} ${isLiked && styles.pressedLikeButton}`} onClick={toggleLike}>{isLiked ? <>&#128078;</> : <>&#128077;</>}{likeCount}</button>
+                    </div>
+                </div>
+
             </div>
-            <div>
-                <p>@{post.userName}</p>
-                <button onClick={hasUserLiked ? removeLike : addLike}>{hasUserLiked ? <>&#128078;</> : <>&#128077;</>}</button>
-                {!!likes?.length && <p>Likes: {likes?.length}</p>}
-                <CommentsBox post={post} />
-            </div>
+
+            {/* <CommentsBox post={post} /> */}
         </div >
     );
 };

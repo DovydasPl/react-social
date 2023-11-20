@@ -1,58 +1,54 @@
 import { useEffect, useState } from "react";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { db, auth } from "../../config/firebase";
-import { addDoc, collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { Comment } from "./Comment";
 import { IComment, IPost } from "../../types/posts";
 
 export const CommentsBox = (props: { post: IPost; }) => {
     const { post } = props;
-    const [user] = useAuthState(auth);
 
     const [comment, setComment] = useState<string>('');
     const [comments, setComments] = useState<IComment[] | null>(null);
 
-    const commentsRef = collection(db, 'comments');
-    const commentsDoc = query(commentsRef, where('postId', '==', post.id));
 
     const addComment = async () => {
         try {
-            if (!user) return;
+            // if (!user) return;
 
-            const newDoc = await addDoc(commentsRef, {
-                userId: user?.uid,
-                postId: post.id,
-                content: comment
-            });
+            // const newDoc = await addDoc(commentsRef, {
+            //     userId: user?.uid,
+            //     postId: post.id,
+            //     userPhoto: user?.photoURL,
+            //     userName: user?.displayName,
+            //     content: comment
+            // });
 
-            const newComment = {
-                id: newDoc.id,
-                userId: user?.uid,
-                content: comment
-            };
+            // const newComment = {
+            //     id: newDoc.id,
+            //     userId: user?.uid,
+            //     userPhoto: user?.photoURL,
+            //     userName: user?.displayName,
+            //     content: comment,
+            // };
 
-            setComments((prev => prev ? [...prev, newComment] : [newComment]));
+            // setComments((prev => prev ? [...prev, newComment] : [newComment]));
         } catch (err) {
             console.log(err);
         }
     };
 
     const getComments = async () => {
-        const data = await getDocs(commentsDoc);
-        setComments(data.docs.map(doc => ({
-            id: doc.id,
-            userId: doc.data().userId,
-            content: doc.data().content
-        })));
+        // setComments(data.docs.map(doc => ({
+        //     id: doc.id,
+        //     userId: doc.data().userId,
+        //     userPhoto: doc.data().userPhoto,
+        //     userName: doc.data().userName,
+        //     content: doc.data().content
+        // })));
     };
 
     const removeComment = async (id: string) => {
         try {
-            const commentToDelete = doc(db, 'comments', id);
-
-            await deleteDoc(commentToDelete);
-
-            setComments((prev => prev && prev.filter((comment) => comment.id !== id)));
+            // setComments((prev => prev && prev.filter((comment) => comment.id !== id)));
         } catch (err) {
             console.log(err);
         }

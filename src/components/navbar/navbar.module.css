@@ -1,36 +1,44 @@
-.header {
-    background: blue;
-    padding: 20px 10px;
-    display: flex;
-    height: 50px;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 50px;
+.wrapper {
+    max-width: 1200px;
+    padding: 0 3rem;
+    margin: 0 auto;
 }
 
-
-.nav {
+header {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 0;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    height: 51px;
+}
+
+.navigation {
+    display: flex;
+    gap: 10rem;
+}
+
+nav {
+    display: flex;
+    gap: 2rem;
 }
 
 .navlink {
-    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
+    position: relative;
+    color: #3B3C4A;
 }
 
 .profile {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    height: 30px;
+    color: #3B3C4A;
 }
 
-.profileName {
-    color: white;
-}
-
-.profileImage {
-    height: 30px;
-    border-radius: 100%;
+.active::before {
+    content: '';
+    width: 2rem;
+    bottom: -6px;
+    border-bottom: 2px solid #3B3C4A;
+    position: absolute;
 }
