@@ -66,7 +66,6 @@ export class APIService {
 
         fetch(`${process.env.REACT_APP_API_URL}${path}`, options)
             .then((resp) => {
-                if (!resp.ok) throw resp;
                 return resp.json();
             })
             .then((resp) => {
@@ -124,11 +123,9 @@ export class APIService {
             .then((resp) => {
                 if (!resp.ok) throw resp;
 
-                console.log(resp);
                 return resp.json();
             })
             .then((resp) => {
-                console.log(resp);
                 setLoading(false);
                 setResponse(resp);
             }).catch(error => {
